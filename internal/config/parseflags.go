@@ -1,8 +1,42 @@
 package config
 
-type Config struct {
-	Port     string
-	Database string
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+)
+
+type ServerConfig struct {
+	ServerPort int `json:"port"`
+
+	Resolution string `json:"resolution"`
+
+	// // resolutionArray???
+	// BrokerCapacity          int
+	// MaxBrokerRetriesCounter int8
+	// IdealCaching            bool
 }
 
-// SCALABLE TODO
+func NewConfig() *ServerConfig {
+	return &ServerConfig{}
+}
+
+func (s *ServerConfig) ParseFlags(fileName string) error {
+	file, err := os.Open(fileName)
+	if err != nil {
+		fmt.Println("Error handling file:", err)
+		return err
+	}
+	defer file.Close()
+
+	// Создаём декодер JSON
+	decoder := json.NewDecoder(file)
+
+	// Декодируем JSON из файла
+	err = decoder.Decode(s)
+	if err != nil {
+		fmt.Println("error decoding:", err)
+		return err
+	}
+	return nil
+}

@@ -20,7 +20,6 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	Mainstream_Load_FullMethodName = "/service.Mainstream/Load"
-	Mainstream_Give_FullMethodName = "/service.Mainstream/Give"
 )
 
 // MainstreamClient is the client API for Mainstream service.
@@ -29,8 +28,6 @@ const (
 type MainstreamClient interface {
 	// Loads & saves thumbs in DB
 	Load(ctx context.Context, in *LoadRequest, opts ...grpc.CallOption) (*LoadResponse, error)
-	// Give thumbs from DB
-	Give(ctx context.Context, in *GiveRequest, opts ...grpc.CallOption) (*GiveResponse, error)
 }
 
 type mainstreamClient struct {
@@ -51,24 +48,12 @@ func (c *mainstreamClient) Load(ctx context.Context, in *LoadRequest, opts ...gr
 	return out, nil
 }
 
-func (c *mainstreamClient) Give(ctx context.Context, in *GiveRequest, opts ...grpc.CallOption) (*GiveResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GiveResponse)
-	err := c.cc.Invoke(ctx, Mainstream_Give_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // MainstreamServer is the server API for Mainstream service.
 // All implementations must embed UnimplementedMainstreamServer
 // for forward compatibility.
 type MainstreamServer interface {
 	// Loads & saves thumbs in DB
 	Load(context.Context, *LoadRequest) (*LoadResponse, error)
-	// Give thumbs from DB
-	Give(context.Context, *GiveRequest) (*GiveResponse, error)
 	mustEmbedUnimplementedMainstreamServer()
 }
 
@@ -81,9 +66,6 @@ type UnimplementedMainstreamServer struct{}
 
 func (UnimplementedMainstreamServer) Load(context.Context, *LoadRequest) (*LoadResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Load not implemented")
-}
-func (UnimplementedMainstreamServer) Give(context.Context, *GiveRequest) (*GiveResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Give not implemented")
 }
 func (UnimplementedMainstreamServer) mustEmbedUnimplementedMainstreamServer() {}
 func (UnimplementedMainstreamServer) testEmbeddedByValue()                    {}
@@ -124,24 +106,6 @@ func _Mainstream_Load_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Mainstream_Give_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GiveRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MainstreamServer).Give(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Mainstream_Give_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MainstreamServer).Give(ctx, req.(*GiveRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Mainstream_ServiceDesc is the grpc.ServiceDesc for Mainstream service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -152,10 +116,6 @@ var Mainstream_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Load",
 			Handler:    _Mainstream_Load_Handler,
-		},
-		{
-			MethodName: "Give",
-			Handler:    _Mainstream_Give_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

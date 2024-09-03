@@ -3,21 +3,24 @@ package service
 import (
 	"context"
 
-	"github.com/gofiber/fiber/v2/log"
+	"log"
+
 	pb "github.com/nemesidaa/thumbsYT/proto/gen/service"
 )
 
-func (s *GRPCServer) Give(ctx context.Context, req *pb.GiveRequest) (*pb.GiveResponse, error) {
-
-	return &pb.GiveResponse{Status: StatusSuccess}, nil
-}
-
 func (s *GRPCServer) Load(ctx context.Context, req *pb.LoadRequest) (*pb.LoadResponse, error) {
-	ctx, err := s.Loader.Load(req.VideoID, req.Resolution, ctx)
+	data, ctx, err := s.Loader.Load(req.VideoID, req.Resolution, ctx)
 	if err != nil {
-		log.Warnf("Failed to load: %s", err)
-		return &pb.LoadResponse{DBID: StatusError}, err
+		log.Printf("Failed to load: %s", err)
+		return &pb.LoadResponse{DBID: "nil", RawData: "nil", Status: StatusError}, err
 	}
 
-	return &pb.LoadResponse{DBID: "123"}, nil
+	_, _, err = s.Storage.Thumb().Save(ctx, req.VideoID, string(data), req.Resolution)
+	if err != nil {
+		log.Printf("Failed to cache: %s", err)
+		return &pb.LoadResponse{DBID: "nil", RawData: "nil", Status: StatusError}, err
+	}
+	// ctx for scalability
+	log.Printf("Loaded: %s", req.VideoID)
+	return &pb.LoadResponse{DBID: req.VideoID, RawData: string(data), Status: StatusSuccess}, nil
 }

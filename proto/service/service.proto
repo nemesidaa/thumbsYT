@@ -8,27 +8,21 @@ service Mainstream {
   // Loads & saves thumbs in DB
   rpc Load (LoadRequest) returns (LoadResponse);
   
-  // Give thumbs from DB
-  rpc Give (GiveRequest) returns (GiveResponse);
 }
 
 // The request message containing ID of video and resolution
 message LoadRequest {
-  string videoID = 1;
-  string resolution = 2;
+  
+  //lazy fifostack, at least I tried
+  string requestID = 1;
+
+  string videoID = 2;
+  string resolution = 3;
 }
 
 // The response message containing the DB ID
 message LoadResponse {
   string DBID = 1;
-}
-
-// The request message for the Give method
-message GiveRequest {
-  string DBID = 1;
-}
-
-// The response message for the Give method
-message GiveResponse {
-  string status = 1;
+  string rawData = 2;
+  string status = 3;
 }

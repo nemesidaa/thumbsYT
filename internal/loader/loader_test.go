@@ -15,7 +15,7 @@ var (
 func TestLoader(t *testing.T) {
 	//Rickroll!!!
 	loader := ldr.NewLoader()
-	ctx, err := loader.Load("dQw4w9WgXcQ", "hqdefault", context.Background())
+	_, ctx, err := loader.Load("dQw4w9WgXcQ", "hqdefault", context.Background())
 	if err != nil {
 		t.Error(err)
 	}
@@ -27,7 +27,7 @@ func TestLoader(t *testing.T) {
 
 func BenchmarkLoader(b *testing.B) {
 	loader := ldr.NewLoader()
-	ctx, err := loader.Load("dQw4w9WgXcQ", "hqdefault", context.Background())
+	_, ctx, err := loader.Load("dQw4w9WgXcQ", "hqdefault", context.Background())
 	if err != nil {
 		b.Error(err)
 	}

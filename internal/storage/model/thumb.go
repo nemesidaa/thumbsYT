@@ -2,8 +2,8 @@ package model
 
 type Thumb struct {
 	ID         string
-	Path       string
 	Resolution string
+	Data       string
 }
 
 type SuccessThumbTX struct{}

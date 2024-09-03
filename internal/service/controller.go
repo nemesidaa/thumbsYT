@@ -3,16 +3,18 @@ package service
 import (
 	"net"
 
+	"github.com/nemesidaa/thumbsYT/internal/config"
 	pb "github.com/nemesidaa/thumbsYT/proto/gen/service"
 	"google.golang.org/grpc"
 )
 
-func ListenAndServe(port int) error {
+func ListenAndServe(cfg *config.ServerConfig) error {
 	server := grpc.NewServer()
-	logical := NewGRPCServer()
+	logical := NewGRPCServer(cfg)
+	// defer logical.LazyBroker.Close()
 	pb.RegisterMainstreamServer(server, logical)
 
-	l, err := net.Listen("tcp", Port(port))
+	l, err := net.Listen("tcp", Port(cfg.ServerPort))
 	if err != nil {
 		return err
 	}
