@@ -16,8 +16,8 @@ const (
 )
 
 type GRPCServer struct {
-	pb.UnimplementedMainstreamServer
-	// Thumbloader & YTcfg here
+	pb.MainstreamServer
+	// Thumbloader & Cache here
 	Loader *loader.Loader
 
 	Storage *store.Storage
@@ -26,9 +26,9 @@ type GRPCServer struct {
 }
 
 func NewGRPCServer(config *config.ServerConfig) *GRPCServer {
-	db := store.NewStorage()
+	db := store.NewStorage(config.DBName)
 	return &GRPCServer{
-		Loader:  loader.NewLoader(),
+		Loader:  loader.NewLoader(config.Resolution),
 		Storage: db,
 
 		// LazyBroker: txbroker.NewLazyBroker(config.BrokerCapacity, config.MaxBrokerRetriesCounter, config.IdealCaching, db),

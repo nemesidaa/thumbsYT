@@ -1,0 +1,8 @@
+
+{
+    "port": 5252,
+    "host": "localhost", 
+    "resolution": "hqdefault",
+    "log_level": "info",
+    "timeout": 15
+}

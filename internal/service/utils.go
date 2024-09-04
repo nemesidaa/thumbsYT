@@ -2,6 +2,6 @@ package service
 
 import "fmt"
 
-func Port(addr int) string {
-	return fmt.Sprintf(":%d", addr)
+func Addr(host string, port int) string {
+	return fmt.Sprintf("%s:%d", host, port)
 }
