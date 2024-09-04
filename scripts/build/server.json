@@ -1,0 +1,6 @@
+{
+    "port": 5252,
+    "host": "localhost", 
+    "resolution": "hqdefault",
+    "dbname": "test.db"
+}

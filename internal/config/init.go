@@ -7,10 +7,10 @@ import (
 )
 
 type ServerConfig struct {
-	ServerPort int `json:"port"`
-
+	ServerPort int    `json:"port"`
+	ServerHost string `json:"host"`
 	Resolution string `json:"resolution"`
-
+	DBName     string `json:"dbname"`
 	// // resolutionArray???
 	// BrokerCapacity          int
 	// MaxBrokerRetriesCounter int8

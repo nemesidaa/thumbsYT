@@ -2,9 +2,10 @@ package store
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
 
-	_ "github.com/mattn/go-sqlite3"
+	_ "modernc.org/sqlite"
 )
 
 type Storage struct {
@@ -12,14 +13,22 @@ type Storage struct {
 	thumb *ThumbRepo
 }
 
-func NewStorage() *Storage {
-	db, err := sql.Open("sqlite3", "./capsule/storage.sqlite3")
+func NewStorage(name string) *Storage {
+	db, err := sql.Open("sqlite", fmt.Sprintf("./%s", name))
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Failed to open database: %s", err)
 	}
-	return &Storage{
+
+	store := &Storage{
 		DB: db,
 	}
+
+	err = store.Init()
+	if err != nil {
+		log.Fatalf("Failed to init database: %s", err)
+	}
+
+	return store
 }
 func (s *Storage) Init() error {
 	// migrations for laziest

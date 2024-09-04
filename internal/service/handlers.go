@@ -9,18 +9,24 @@ import (
 )
 
 func (s *GRPCServer) Load(ctx context.Context, req *pb.LoadRequest) (*pb.LoadResponse, error) {
-	data, ctx, err := s.Loader.Load(req.VideoID, req.Resolution, ctx)
-	if err != nil {
-		log.Printf("Failed to load: %s", err)
-		return &pb.LoadResponse{DBID: "nil", RawData: "nil", Status: StatusError}, err
+	log.Printf("Received: %s\n", req)
+	var data []byte
+	cachedVal, _, err := s.Storage.Thumb().GetByID(ctx, req.VideoID)
+	if cachedVal == nil || err != nil {
+		log.Printf("Caching: %s\n", req)
+		data, ctx, err := s.Loader.Load(req.VideoID, req.Resolution, ctx)
+		if err != nil {
+			log.Printf("Failed to load: %s", err)
+			return &pb.LoadResponse{DBID: "nil", RawData: []byte{}, Status: StatusError}, err
+		}
+		log.Printf("Loaded: %s\n", req.VideoID)
+		go s.Storage.Thumb().Save(ctx, req.VideoID, string(data), req.Resolution)
+	} else {
+		log.Printf("Cached: %s\n", req.VideoID)
+		data = []byte(cachedVal.Data)
 	}
 
-	_, _, err = s.Storage.Thumb().Save(ctx, req.VideoID, string(data), req.Resolution)
-	if err != nil {
-		log.Printf("Failed to cache: %s", err)
-		return &pb.LoadResponse{DBID: "nil", RawData: "nil", Status: StatusError}, err
-	}
 	// ctx for scalability
-	log.Printf("Loaded: %s", req.VideoID)
-	return &pb.LoadResponse{DBID: req.VideoID, RawData: string(data), Status: StatusSuccess}, nil
+	log.Printf("Done: %s\n", req.ServiceID)
+	return &pb.LoadResponse{DBID: req.VideoID, RawData: data, Status: StatusSuccess}, nil
 }

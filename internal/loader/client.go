@@ -11,6 +11,10 @@ type LoaderDone struct{}
 type LoaderFailed struct{}
 
 func (l *Loader) Load(id, resolution string, ctx context.Context) ([]byte, context.Context, error) {
+	if _, ok := AllAvailableResolutions[Resolution(resolution)]; !ok {
+		resolution = l.Resolution
+	}
+
 	// Forming URL
 	url := fmt.Sprintf("https://img.youtube.com/vi/%s/%s.jpg", id, resolution)
 
