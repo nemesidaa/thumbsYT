@@ -10,8 +10,8 @@ type ClientConfig struct {
 	ServerPort int    `json:"port"`
 	ServerHost string `json:"host"`
 	Resolution string `json:"resolution"`
-	LogLevel   string `json:"log_level"`
-	Timeout    int    `json:"timeout"`
+	// LogLevel   string `json:"log_level"`
+	Timeout int `json:"timeout"`
 }
 
 func NewConfig() *ClientConfig {

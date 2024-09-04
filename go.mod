@@ -18,7 +18,7 @@ require (
 )
 
 require (
-	github.com/google/uuid v1.6.0 // indirect
+	github.com/google/uuid v1.6.0
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	golang.org/x/net v0.26.0 // indirect
 	golang.org/x/sys v0.22.0 // indirect
