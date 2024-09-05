@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	logic.SafeExecution()
+	defer logic.SafeExecution()
 
 	cfg := config.NewConfig()
 	if err := cfg.ParseFlags("client.json"); err != nil {

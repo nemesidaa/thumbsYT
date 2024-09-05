@@ -3,7 +3,6 @@ package store
 import (
 	"database/sql"
 	"fmt"
-	"log"
 
 	_ "modernc.org/sqlite"
 )
@@ -13,10 +12,10 @@ type Storage struct {
 	thumb *ThumbRepo
 }
 
-func NewStorage(name string) *Storage {
+func InitStorage(name string) error {
 	db, err := sql.Open("sqlite", fmt.Sprintf("./%s", name))
 	if err != nil {
-		log.Fatalf("Failed to open database: %s", err)
+		return err
 	}
 
 	store := &Storage{
@@ -25,10 +24,10 @@ func NewStorage(name string) *Storage {
 
 	err = store.Init()
 	if err != nil {
-		log.Fatalf("Failed to init database: %s", err)
+		return err
 	}
 
-	return store
+	return nil
 }
 func (s *Storage) Init() error {
 	// migrations for laziest
@@ -41,7 +40,7 @@ func (s *Storage) Init() error {
     `
 	_, err := s.DB.Exec(createThumbsSQL)
 	if err != nil {
-		log.Fatalf("Failed to create table: %s", err)
+		return err
 	}
 	if err = s.DB.Ping(); err != nil {
 		return err
@@ -55,4 +54,16 @@ func (s *Storage) Thumb() *ThumbRepo {
 	}
 	s.thumb = &ThumbRepo{Store: s}
 	return s.thumb
+}
+
+func NewConn(name string) (*Storage, func() error, error) {
+	db, err := sql.Open("sqlite", name)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return &Storage{
+		DB: db,
+	}, db.Close, err
+
 }

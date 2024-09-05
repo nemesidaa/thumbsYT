@@ -8,14 +8,15 @@ import (
 )
 
 func main() {
-	service.SafeExecution()
+	defer service.SafeExecution()
 	cfg := config.NewConfig()
-	log.Println("cfg: ", cfg)
 	if err := cfg.ParseFlags("server.json"); err != nil {
 		log.Fatal(err)
 	}
 	log.Println("Flags Parsed!")
 
-	service.ListenAndServe(cfg)
+	if err := service.ListenAndServe(cfg); err != nil {
+		log.Fatal(err)
+	}
 	log.Println("Server stopped!")
 }

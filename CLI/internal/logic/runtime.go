@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/nemesidaa/thumbsYT/CLI/internal/client"
 	"github.com/nemesidaa/thumbsYT/CLI/internal/config"
@@ -14,6 +15,7 @@ func SafeExecution() {
 	defer func() {
 		if r := recover(); r != nil {
 			log.Println("Recovered from:", r)
+			time.Sleep(time.Second)
 		}
 	}()
 }

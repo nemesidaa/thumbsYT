@@ -16,8 +16,8 @@ func (l *Loader) Load(id, resolution string, ctx context.Context) ([]byte, conte
 	}
 
 	// Forming URL
-	url := fmt.Sprintf("https://img.youtube.com/vi/%s/%s.jpg", id, resolution)
-
+	url := fmt.Sprintf("https://i.ytimg.com/vi/%s/%s.jpg", id, resolution)
+	// https://i.ytimg.com/vi/%s/%s.jpg https://img.youtube.com/vi/%s/%s.jpg
 	// Sending Get request
 	resp, err := http.Get(url)
 	if err != nil {

@@ -10,16 +10,17 @@ import (
 )
 
 func SafeExecution() {
-	defer func() {
-		if r := recover(); r != nil {
-			log.Println("Recovered from:", r)
-		}
-	}()
+	if r := recover(); r != nil {
+		log.Println("Recovered from:", r)
+	}
 }
 
 func ListenAndServe(cfg *config.ServerConfig) error {
 	server := grpc.NewServer()
-	logical := NewGRPCServer(cfg)
+	logical, err := NewGRPCServer(cfg)
+	if err != nil {
+		return err
+	}
 	// defer logical.LazyBroker.Close()
 	pb.RegisterMainstreamServer(server, logical)
 	log.Println("Server Registered!")

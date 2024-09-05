@@ -42,9 +42,9 @@ func NewClient(cfg *config.ClientConfig) (*Client, Closefunc) {
 type Resolution string
 
 var AllAvailableResolutions map[Resolution]struct{} = map[Resolution]struct{}{
-	"sddefault":     {},
-	"hqdefault":     {},
-	"mqdefault":     {},
-	"lqdefault":     {},
-	"maxresdefault": {},
+	"sddefault": {},
+	"hqdefault": {},
+	"mqdefault": {},
+	"lqdefault": {},
+	"hq720":     {},
 }

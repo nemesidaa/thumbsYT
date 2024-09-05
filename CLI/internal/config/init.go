@@ -2,7 +2,7 @@ package config
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"os"
 )
 
@@ -21,7 +21,7 @@ func NewConfig() *ClientConfig {
 func (s *ClientConfig) ParseFlags(fileName string) error {
 	file, err := os.Open(fileName)
 	if err != nil {
-		fmt.Println("Error handling file:", err)
+		log.Println("Error handling file:", err)
 		return err
 	}
 	defer file.Close()
@@ -32,7 +32,7 @@ func (s *ClientConfig) ParseFlags(fileName string) error {
 	// Декодируем JSON из файла
 	err = decoder.Decode(s)
 	if err != nil {
-		fmt.Println("error decoding:", err)
+		log.Println("error decoding:", err)
 		return err
 	}
 	return nil

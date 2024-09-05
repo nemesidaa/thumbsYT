@@ -30,7 +30,7 @@ func (c *Client) HandleLoad(id, resolution string) error {
 	// Отправляем запрос
 	r, err := c.Load(ctx, &pb.LoadRequest{ServiceID: c.ServiceID, VideoID: id, Resolution: resolution})
 	if err != nil {
-		log.Fatalf("could not handle: %v", err)
+		return err
 	}
 
 	fileName := fmt.Sprintf("%s.jpg", id)
@@ -40,25 +40,24 @@ func (c *Client) HandleLoad(id, resolution string) error {
 
 	// Проверяем и создаем директорию, если её нет
 	if err := os.MkdirAll(filepath.Dir(filePath), os.ModePerm); err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	// Создаем файл
 	file, err := os.Create(filePath)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	defer file.Close()
 
 	// Копируем тело ответа в файл
 	if _, err := io.Copy(file, bytes.NewReader([]byte(r.RawData))); err != nil {
-		log.Fatal(err)
+		return err
 	}
 
 	if fileName != "nil" {
 		log.Printf("Thumbnail saved as %s\n", fileName)
 	} else {
-		log.Fatalln("NIL????")
 		return errWTF
 	}
 
