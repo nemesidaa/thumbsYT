@@ -45,7 +45,7 @@ func Start(cfg *config.ClientConfig) {
 				continue
 			}
 			stdin <- task
-			go handleCommand(task, args, client)
+			handleCommand(task, args, client)
 		}
 
 		if err := scanner.Err(); err != nil {

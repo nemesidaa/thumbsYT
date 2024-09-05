@@ -24,7 +24,7 @@ func (s *GRPCServer) Load(ctx context.Context, req *pb.LoadRequest) (*pb.LoadRes
 			//log.Printf("Failed to load: %s", err)
 			return &pb.LoadResponse{DBID: "nil", RawData: []byte{}, Status: StatusError}, err
 		}
-		log.Printf("Loaded: %s\n", req.VideoID)
+		log.Printf("Loaded: %s\n", data[:100])
 		go store.Thumb().Save(ctx, req.VideoID, string(data), req.Resolution)
 	} else {
 		log.Printf("Cached: %s\n", req.VideoID)
