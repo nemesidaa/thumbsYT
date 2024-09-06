@@ -3,7 +3,7 @@ package model
 type Thumb struct {
 	ID         string
 	Resolution string
-	Data       string
+	Data       []byte
 }
 
 type SuccessThumbTX struct{}

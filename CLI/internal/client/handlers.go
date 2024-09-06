@@ -33,6 +33,8 @@ func (c *Client) HandleLoad(id, resolution string) error {
 		return err
 	}
 
+	log.Printf("Received RawData of length: %d\n", len(r.RawData))
+
 	fileName := fmt.Sprintf("%s.jpg", id)
 
 	// Создаем путь к файлу

@@ -10,7 +10,7 @@ type ThumbRepo struct {
 	Store *Storage
 }
 
-func (s *ThumbRepo) Save(ctx context.Context, id, data, resolution string) (*model.Thumb, context.Context, error) {
+func (s *ThumbRepo) Save(ctx context.Context, id string, data []byte, resolution string) (*model.Thumb, context.Context, error) {
 	_, err := s.Store.DB.Exec("INSERT INTO thumb VALUES (?, ?, ?)", id, data, resolution)
 	if err != nil {
 		return nil, context.WithValue(ctx, model.FailedThumbTX{}, id), err

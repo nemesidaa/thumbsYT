@@ -1,6 +1,6 @@
 {
     "port": 5252,
-    "host": "localhost", 
+    "host": "0.0.0.0", 
     "resolution": "hqdefault",
     "dbname": "./test.db",
     "default_db_timeout": 5

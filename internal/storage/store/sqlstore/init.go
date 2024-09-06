@@ -34,7 +34,7 @@ func (s *Storage) Init() error {
 	createThumbsSQL := `
     CREATE TABLE IF NOT EXISTS thumb (
         id varchar(100) PRIMARY KEY,
-        data TEXT NOT NULL,
+        data BLOB NOT NULL,
         resolution string NOT NULL
     );
     `
